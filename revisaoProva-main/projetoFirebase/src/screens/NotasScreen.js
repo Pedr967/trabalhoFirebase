@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Alert
 } from 'react-native';
-import projetosStyles from '../styles/projetosStyles';
+import styles from '../styles/globalStyles';
 import { db } from '../services/credenciaisFirebase';
 import {
   collection,
@@ -17,10 +17,11 @@ import {
   updateDoc,
   doc
 } from 'firebase/firestore';
+import BotaoLogout from '../components/BotaoLogout'; 
 
 export default function NotasScreen() {
   const [projetos, setProjetos] = useState([]);
-  const [notas, setNotas] = useState({}); 
+  const [notas, setNotas] = useState({});
 
   useEffect(() => {
     const q = query(collection(db, 'projetos'), orderBy('criadoEm', 'desc'));
@@ -31,7 +32,6 @@ export default function NotasScreen() {
       }));
       setProjetos(lista);
 
-      // Preenche o estado local com as notas atuais dos projetos
       const notasIniciais = {};
       lista.forEach(proj => {
         notasIniciais[proj.id] = proj.nota ? String(proj.nota) : '';
@@ -49,9 +49,8 @@ export default function NotasScreen() {
     }));
   };
 
-  const salvarNota = async (id) => {
-    const valor = notas[id];
-    if (valor === undefined) return;
+  const salvarNota = async (id, valorManual = null) => {
+    const valor = valorManual !== null ? valorManual : notas[id];
 
     if (valor !== '' && isNaN(Number(valor))) {
       Alert.alert('Erro', 'Digite um valor numérico válido para a nota.');
@@ -68,28 +67,24 @@ export default function NotasScreen() {
     }
   };
 
+  const zerarNota = (id) => {
+    setNotas(prev => ({ ...prev, [id]: '0' }));
+    salvarNota(id, 0);
+  };
+
   return (
-    <ScrollView contentContainerStyle={projetosStyles.container}>
-      <Text style={projetosStyles.title}>Editar Notas</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Editar Notas</Text>
 
-      <View style={{ marginTop: 20 }}>
+      <View style={styles.listaProjetos}>
         {projetos.map((projeto) => (
-          <View key={projeto.id} style={projetosStyles.card}>
-            <Text style={projetosStyles.cardTitle}>{projeto.nome}</Text>
+          <View key={projeto.id} style={styles.card}>
+            <Text style={styles.cardTitle}>{projeto.nome}</Text>
 
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8 }}>
-              <Text style={{ fontWeight: 'bold', marginRight: 8 }}>Nota:</Text>
+            <View style={styles.notaContainer}>
+              <Text style={styles.label}>Nota:</Text>
               <TextInput
-                style={{
-                  borderWidth: 1,
-                  borderColor: '#ccc',
-                  paddingHorizontal: 8,
-                  paddingVertical: 4,
-                  width: 80,
-                  borderRadius: 4,
-                  fontSize: 16,
-                  backgroundColor: '#fff'
-                }}
+                style={styles.input}
                 keyboardType="numeric"
                 value={notas[projeto.id] || ''}
                 onChangeText={(text) => handleNotaChange(projeto.id, text)}
@@ -97,21 +92,23 @@ export default function NotasScreen() {
               />
 
               <TouchableOpacity
-                style={{
-                  marginLeft: 12,
-                  backgroundColor: '#4CAF50',
-                  paddingVertical: 6,
-                  paddingHorizontal: 12,
-                  borderRadius: 4
-                }}
+                style={styles.botaoSalvar}
                 onPress={() => salvarNota(projeto.id)}
               >
-                <Text style={{ color: 'white', fontWeight: 'bold' }}>Salvar</Text>
+                <Text style={styles.textoBotao}>Salvar</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.botaoZerar}
+                onPress={() => zerarNota(projeto.id)}
+              >
+                <Text style={styles.textoBotao}>Zerar Nota</Text>
               </TouchableOpacity>
             </View>
           </View>
         ))}
       </View>
+      <BotaoLogout />
     </ScrollView>
   );
 }

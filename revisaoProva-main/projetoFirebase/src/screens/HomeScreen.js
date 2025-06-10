@@ -1,22 +1,29 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import globalStyles from '../styles/globalStyles';
+import { useNavigation } from '@react-navigation/native';
+import styles from '../styles/HomeStyles';
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = () => {
+  const navigation = useNavigation();
+
   return (
-    <View style={globalStyles.container}>
-      <Text style={globalStyles.title}>Welcome to the App</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Análise e Avaliação de Projetos Integradores</Text>
+
+      <Text style={styles.subtitle}>Já possui conta?</Text>
       <TouchableOpacity
-        style={globalStyles.button}
+        style={styles.button}
         onPress={() => navigation.navigate('Login')}
       >
-        <Text style={globalStyles.buttonText}>Login</Text>
+        <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
+
+      <Text style={styles.subtitle}>Não possui conta?</Text>
       <TouchableOpacity
-        style={globalStyles.button}
+        style={styles.button}
         onPress={() => navigation.navigate('Register')}
       >
-        <Text style={globalStyles.buttonText}>Register</Text>
+        <Text style={styles.buttonText}>Registrar</Text>
       </TouchableOpacity>
     </View>
   );

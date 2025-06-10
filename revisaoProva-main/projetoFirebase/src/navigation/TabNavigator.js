@@ -1,4 +1,3 @@
-// src/navigation/TabNavigator.js
 import React, { useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
@@ -33,7 +32,7 @@ export default function TabNavigator() {
   }, []);
 
   if (loading) {
-    return null; // Ou uma tela de loading, se preferir
+    return null;
   }
 
   return (
@@ -57,18 +56,19 @@ export default function TabNavigator() {
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
       })}
-    >
-      {/* Aba Projetos disponível para todos */}
-      <Tab.Screen name="Projetos" component={ProjetosScreen} />
 
-      {/* Outras abas só para avaliador e administrador */}
+    >
+      <Tab.Screen name="Projetos" component={ProjetosScreen} />
+      <Tab.Screen name="Cadastro" component={CadastrosStyles} />
+
       {(tipoUsuario === 'avaliador' || tipoUsuario === 'administrador') && (
-        <>
-          <Tab.Screen name="Cadastro" component={CadastrosStyles} />
-          <Tab.Screen name="Usuários" component={UserListScreen} />
-          <Tab.Screen name="Notas" component={NotasScreen} />
-        </>
+        <Tab.Screen name="Notas" component={NotasScreen} />
       )}
+
+      {tipoUsuario !== 'aluno' && tipoUsuario !== 'avaliador' && (
+        <Tab.Screen name="Usuários" component={UserListScreen} />
+      )}
+
     </Tab.Navigator>
   );
 }

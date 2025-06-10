@@ -11,7 +11,7 @@ import { Picker } from '@react-native-picker/picker';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import auth from '../services/credenciaisFirebaseAuth';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
-import globalStyles from '../styles/globalStyles';
+import globalStyles from '../styles/cadastrosStyles';
 
 const db = getFirestore();
 
@@ -30,7 +30,6 @@ export default function RegisterScreen({ navigation }) {
 
   const handleSubmit = async () => {
     try {
-      // 1. Cria usuário no Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         form.email,
@@ -38,13 +37,12 @@ export default function RegisterScreen({ navigation }) {
       );
       const user = userCredential.user;
 
-      // 2. Salva dados na coleção pessoa com o uid do usuário
       await setDoc(doc(db, 'pessoa', user.uid), {
         nome: form.nome,
         periodo: form.periodo || '',
         curso: form.curso || '',
         email: form.email,
-        tipo: form.tipoUsuario,  // importante para controle de acesso
+        tipo: form.tipoUsuario, 
       });
 
       Alert.alert('Sucesso', 'Usuário cadastrado!');

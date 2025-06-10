@@ -13,11 +13,9 @@ export default function LoginScreen({ navigation }) {
 
   const handleLogin = async () => {
     try {
-      // Autenticação com Firebase Auth
       const userCredential = await signInWithEmailAndPassword(auth, email, senha);
       const user = userCredential.user;
 
-      // Busca na coleção 'pessoa' pelo email
       const pessoaRef = collection(db, 'pessoa');
       const q = query(pessoaRef, where('email', '==', user.email));
       const querySnapshot = await getDocs(q);
@@ -25,7 +23,6 @@ export default function LoginScreen({ navigation }) {
       if (!querySnapshot.empty) {
         const userData = querySnapshot.docs[0].data();
 
-        // Salva dados no AsyncStorage
         await AsyncStorage.setItem(
           '@usuarioLogado',
           JSON.stringify({

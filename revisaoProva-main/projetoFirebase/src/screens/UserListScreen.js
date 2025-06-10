@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import useFirebase from '../hooks/useFirebase';
 import globalStyles from '../styles/userListStyles';
+import BotaoLogout from '../components/BotaoLogout';
 
 export default function UserListScreen({ navigation }) {
   const [users, setUsers] = useState([]);
@@ -61,6 +62,7 @@ export default function UserListScreen({ navigation }) {
         keyExtractor={(x) => x.id}
         renderItem={renderItem}
       />
+      <BotaoLogout />
     </View>
   );
 }

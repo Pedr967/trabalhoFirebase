@@ -13,6 +13,7 @@ import { db } from '../services/credenciaisFirebase';
 import { collection, addDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import auth from '../services/credenciaisFirebaseAuth';
+import BotaoLogout from '../components/BotaoLogout';
 
 export default function ProjetosScreen({ navigation }) {
   const [nomeProjeto, setNomeProjeto] = useState('');
@@ -124,60 +125,7 @@ export default function ProjetosScreen({ navigation }) {
       </TouchableOpacity>
 
       <View style={{ height: 30 }} />
-
-      <Text style={globalStyles.title}>Cadastro de Usuário</Text>
-      <TextInput
-        placeholder="Nome"
-        style={globalStyles.input}
-        value={form.nome}
-        onChangeText={(v) => handleUserChange('nome', v)}
-      />
-
-      {form.tipo === 'aluno' && (
-        <>
-          <TextInput
-            placeholder="Período"
-            style={globalStyles.input}
-            value={form.periodo}
-            onChangeText={(v) => handleUserChange('periodo', v)}
-          />
-          <TextInput
-            placeholder="Curso"
-            style={globalStyles.input}
-            value={form.curso}
-            onChangeText={(v) => handleUserChange('curso', v)}
-          />
-        </>
-      )}
-
-      <TextInput
-        placeholder="Email"
-        style={globalStyles.input}
-        value={form.email}
-        onChangeText={(v) => handleUserChange('email', v)}
-      />
-
-      <TextInput
-        placeholder="Senha"
-        secureTextEntry
-        style={globalStyles.input}
-        value={form.senha}
-        onChangeText={(v) => handleUserChange('senha', v)}
-      />
-
-      <Text style={globalStyles.label}>Tipo de usuário</Text>
-      <Picker
-        selectedValue={form.tipo}
-        style={globalStyles.input}
-        onValueChange={(itemValue) => handleUserChange('tipo', itemValue)}
-      >
-        <Picker.Item label="Aluno" value="aluno" />
-        <Picker.Item label="Avaliador" value="avaliador" />
-      </Picker>
-
-      <TouchableOpacity style={globalStyles.button} onPress={handleCadastrarUsuario}>
-        <Text style={globalStyles.buttonText}>Cadastrar Usuário</Text>
-      </TouchableOpacity>
+      <BotaoLogout />
     </ScrollView>
   );
 }
